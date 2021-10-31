@@ -1,7 +1,6 @@
 package handle
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/zigapk/prpo-auth/internal/handle/errors"
@@ -60,11 +59,4 @@ func PasswordChangeHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-}
-
-// PasswordChangeHandle handles changing user password.
-func Asdf(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Println("asfd")
-	w.WriteHeader(http.StatusOK)
 }
