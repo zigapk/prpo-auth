@@ -7,7 +7,9 @@ import (
 	"github.com/urfave/cli/v2"
 	"github.com/zigapk/prpo-auth/internal/cmd"
 	"github.com/zigapk/prpo-auth/internal/config"
+	"github.com/zigapk/prpo-auth/internal/database"
 	"github.com/zigapk/prpo-auth/internal/logger"
+	token "github.com/zigapk/prpo-auth/internal/util"
 )
 
 func main() {
@@ -17,18 +19,24 @@ func main() {
 	// Init logger
 	logger.Init()
 
-	// TODO: database
+	// Init database.
+	database.Init()
+	defer database.Close()
 
-	// TODO: token
+	// Set public key for tokens.
+	token.SetKey(config.Login.SigningPublicKey)
 
-	// TODO: oauth2
-
+	// Create cli app.
 	app := cli.NewApp()
 	app.Name = "PRPO auth microservice."
 	app.Version = "0.0.1"
 	app.Authors = []*cli.Author{{Name: "Žiga Patačko Koderman", Email: "ziga.patacko@gmail.com"}}
 
-	app.Commands = []*cli.Command{cmd.Serve}
+	app.Commands = []*cli.Command{
+		cmd.Serve,
+		cmd.GenKeys,
+		cmd.CreateUser,
+	}
 
 	err := app.Run(os.Args)
 	if err != nil {

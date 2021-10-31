@@ -27,5 +27,9 @@ func Load() {
 	cfg = gonfig.New(iniProvider, environment.Provider{})
 	cfg.AppName = "prpo-auth"
 
-	// TODO: signing keys
+	err = Login.LoadKeys()
+	if err != nil {
+		log.Printf("Could not load signing keys (error: %s). You can generate them with `genkeys` command.\n",
+			err.Error())
+	}
 }

@@ -1,6 +1,8 @@
 package config
 
 type logs struct{}
+type database struct{}
+type server struct{}
 
 // logs section
 func (l logs) LogLevel() int {
@@ -38,6 +40,56 @@ func (l logs) MaxBackups() int {
 	return val
 }
 
+// database
+func (d database) Host() string {
+	val, _ := cfg.GetString("database", "host")
+	return val
+}
+
+func (d database) Port() int {
+	val, _ := cfg.GetInt("database", "port")
+	return val
+}
+
+func (d database) User() string {
+	val, _ := cfg.GetString("database", "user")
+	return val
+}
+
+func (d database) Password() string {
+	val, _ := cfg.GetString("database", "password")
+	return val
+}
+
+func (d database) DbName() string {
+	val, _ := cfg.GetString("database", "db_name")
+	return val
+}
+
+func (d database) SslMode() string {
+	val, _ := cfg.GetString("database", "ssl_mode")
+	return val
+}
+
+// server
+func (s server) ListenAddress() string {
+	val, _ := cfg.GetString("server", "listen_address")
+	return val
+}
+
+func (s server) Port() int {
+	val, _ := cfg.GetInt("server", "port")
+	return val
+}
+
+func (s server) BaseAddress() string {
+	val, _ := cfg.GetString("server", "base_address")
+	return val
+}
+
 var (
-	Logs = logs{}
+	Logs     = logs{}
+	Server   = server{}
+	Database = database{}
+	Login    = login{}
 )
