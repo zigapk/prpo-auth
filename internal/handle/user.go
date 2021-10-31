@@ -18,10 +18,6 @@ type newUserRequest struct {
 	Password string `json:"password"`
 }
 
-type userEditRequest struct {
-	Name string `json:"name"`
-}
-
 // NewUserHandle creates new user.
 func NewUserHandle(w http.ResponseWriter, r *http.Request) {
 	// Get data from body.
