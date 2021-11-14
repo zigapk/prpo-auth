@@ -24,6 +24,7 @@ func apiRoutes() []Route {
 			Path:           "/users",
 			AuthorizedOnly: false,
 			POST:           http.HandlerFunc(handle.NewUserHandle),
+			GET:            http.HandlerFunc(handle.GetUsersHandle),
 		},
 		{
 			Name:           "user",

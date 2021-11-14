@@ -65,3 +65,17 @@ func UserHandle(w http.ResponseWriter, r *http.Request) {
 	res, _ := json.Marshal(u)
 	_, _ = w.Write(res)
 }
+
+func GetUsersHandle(w http.ResponseWriter, r *http.Request) {
+	var users []*user.User
+
+	users, err := user.All()
+
+	if err != nil {
+		logger.Log.Warn().Err(err).Send()
+	}
+
+	// Write response.
+	res, _ := json.Marshal(users)
+	_, _ = w.Write(res)
+}

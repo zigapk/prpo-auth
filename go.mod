@@ -8,6 +8,7 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/docker/docker v20.10.9+incompatible // indirect
+	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/golang-migrate/migrate/v4 v4.15.0
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
