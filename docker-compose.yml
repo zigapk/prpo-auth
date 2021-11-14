@@ -1,0 +1,25 @@
+version: "3"
+services:
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=auth
+      - POSTGRES_PASSWORD=rootroot
+    volumes:
+      - /home/auth/db:/var/lib/posrgresql/data
+    restart: always
+  backend:
+    image: docker.recompile.it/zigapk/auth
+    environment:
+      - AUTH_DATABASE_HOST=db
+      - AUTH_DATABASE_USER=auth
+      - AUTH_DATABASE_PASSWORD=rootroot
+      - AUTH_DATABASE_DB_NAME=auth
+    ports:
+      - 8000:8000
+    volumes:
+      - /home/auth/logs:/app/logs
+      - /home/auth/conf:/app/conf
+    depends_on:
+      - db
+    restart: always
