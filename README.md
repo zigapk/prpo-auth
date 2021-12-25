@@ -44,7 +44,12 @@ System behaviour can be configured through [configs/config.ini](configs/config.i
 
 ## Documentation
 
-**TODO**: Write an OpenAPI spec.
+Generate docs using
+```bash
+swag init -d cmd/auth/,internal/handle
+```
+
+The docs are then available at `/docs`.
 
 This microservice exposes its functionality via the following http endpoints:
 

@@ -16,7 +16,15 @@ type passwordChangeRequest struct {
 	NewPassword string `json:"new_password"`
 }
 
-// PasswordChangeHandle handles changing user password.
+// PasswordChangeHandle  @Summary       Handles changing user password.
+// @Description          Handles changing user password.
+// @Produce              application/json
+// @Param                user_id       body  string  true  "User's ID."
+// @Param                old_password  body  string  true  "User's old password."
+// @Param                new_password  body  string  true  "User's new password."
+// @Success              204
+// @Failure              500  {object}  errors.ResponseError
+// @Router               /change_password [post]
 func PasswordChangeHandle(w http.ResponseWriter, r *http.Request) {
 	// Get data from request.
 	passRequest := &passwordChangeRequest{}

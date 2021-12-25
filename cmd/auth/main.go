@@ -12,6 +12,13 @@ import (
 	token "github.com/zigapk/prpo-auth/internal/util"
 )
 
+// @title        PRPO Auth API
+// @version      1.0
+// @description  PRPO Auth service api.
+
+// @contact.name   Žiga Patačko Koderman
+// @contact.url    https://zerodays.dev
+// @contact.email  ziga@zerodays.dev
 func main() {
 	// Load config
 	config.Load()

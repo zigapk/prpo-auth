@@ -16,7 +16,11 @@ type readinessResponse struct {
 	DBStatus string `json:"db_status"`
 }
 
-// Returns weather microservice is alive.
+// LivenessHandle  @Summary      Liveness probe
+// @Description    Get liveness status from service.
+// @Produce        json
+// @Success        200  {object}  livenessResponse
+// @Router         /health/liveness [get]
 func LivenessHandle(w http.ResponseWriter, _ *http.Request) {
 	resp := livenessResponse{}
 	resp.Status = "UP"
@@ -26,7 +30,11 @@ func LivenessHandle(w http.ResponseWriter, _ *http.Request) {
 	_, _ = w.Write(res)
 }
 
-// Returns weather microservice is ready to accept connections.
+// ReadinessHandle  @Summary      Readiness probe
+// @Description     Returns weather microservice is ready to accept connections.
+// @Produce         json
+// @Success         200  {object}  readinessResponse
+// @Router          /health/readiness [get]
 func ReadinessHandle(w http.ResponseWriter, _ *http.Request) {
 	resp := readinessResponse{}
 	ok := true
@@ -53,7 +61,10 @@ func ReadinessHandle(w http.ResponseWriter, _ *http.Request) {
 	_, _ = w.Write(res)
 }
 
-// MetricsHandle writes metrics to JSON.
+// MetricsHandle  @Summary      Metrics
+// @Description   Returns microservice metrics data.
+// @Produce       json
+// @Router        /metrics [get]
 func MetricsHandle(w http.ResponseWriter, _ *http.Request) {
 	metrics.WriteJSONOnce(metrics.DefaultRegistry, w)
 }

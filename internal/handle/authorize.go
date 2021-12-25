@@ -27,22 +27,31 @@ type authorizationRequest struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
+type authorizeAccessToken struct {
+	AccessToken    string `json:"access_token"`
+	AccessTokenTtl int    `json:"access_token_ttl"`
+}
+
+type authorizeRefreshToken struct {
+	RefreshToken   string `json:"refresh_token"`
+	AccessToken    string `json:"access_token"`
+	AccessTokenTtl int    `json:"access_token_ttl"`
+}
+
 type User struct {
 	UID string
 }
 
-func FromToken(accessToken string) (*User, error) {
-	claims, err := util.Validate(accessToken)
-	if err != nil {
-		return nil, err
-	}
-
-	u := &User{
-		UID: claims.Subject,
-	}
-	return u, nil
-}
-
+// AuthorizeHandle  @Summary      Authorize either using a JWT token or a username/password combo.
+// @Description     Authorize either using a JWT token or a username/password combo
+// @Produce         application/json
+// @Param           type      body      string  true   "Either `token` or `password`."
+// @Param           email     body      string  false  "Users email in case type is set to `password`."
+// @Param           password  body      string  false  "Users password in case type is set to `password`."
+// @Param           token     body      string  false  "Refresh token in case type is set to `token`."
+// @Success         200       {object}  authorizeRefreshToken
+// @Failure         500       {object}  errors.ResponseError
+// @Router          /authorize [post]
 func AuthorizeHandle(w http.ResponseWriter, r *http.Request) {
 
 	authRequest := &authorizationRequest{}
@@ -94,10 +103,10 @@ func authorizeWithPassword(w http.ResponseWriter, authRequest *authorizationRequ
 	}
 
 	// Write response.
-	res, _ := json.Marshal(map[string]interface{}{
-		"refresh_token":    dev.Token,
-		"access_token":     token,
-		"access_token_ttl": config.Login.TokenTtl(),
+	res, _ := json.Marshal(authorizeRefreshToken{
+		RefreshToken:   dev.Token,
+		AccessToken:    token,
+		AccessTokenTtl: config.Login.TokenTtl(),
 	})
 	_, _ = w.Write(res)
 }
@@ -131,9 +140,9 @@ func authorizeWithToken(w http.ResponseWriter, authRequest *authorizationRequest
 	}
 
 	// Write response.
-	res, _ := json.Marshal(map[string]interface{}{
-		"access_token":     token,
-		"access_token_ttl": config.Login.TokenTtl(),
+	res, _ := json.Marshal(authorizeAccessToken{
+		AccessToken:    token,
+		AccessTokenTtl: config.Login.TokenTtl(),
 	})
 	_, _ = w.Write(res)
 }

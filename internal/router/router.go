@@ -1,6 +1,8 @@
 package router
 
 import (
+	httpSwagger "github.com/swaggo/http-swagger"
+	_ "github.com/zigapk/prpo-auth/docs"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -46,6 +48,8 @@ func NewRouter() *mux.Router {
 	for _, r := range apiRoutes() {
 		addRoute(router, r)
 	}
+
+	router.PathPrefix("/docs/").Handler(httpSwagger.WrapHandler)
 
 	return router
 }

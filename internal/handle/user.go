@@ -18,7 +18,15 @@ type newUserRequest struct {
 	Password string `json:"password"`
 }
 
-// NewUserHandle creates new user.
+// NewUserHandle  @Summary      Creates new user.
+// @Description   Create new user.
+// @Produce        json
+// @Param         email     body      string  true  "New user's email"
+// @Param         name      body      string  true  "New user's name"
+// @Param         password  body      string  true  "New user's password"
+// @Success       200       {object}  User
+// @Failure        500  {object}  errors.ResponseError
+// @Router        /users/ [post]
 func NewUserHandle(w http.ResponseWriter, r *http.Request) {
 	// Get data from body.
 	newReq := &newUserRequest{}
@@ -40,7 +48,13 @@ func NewUserHandle(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(res)
 }
 
-// UserHandle handles getting a single user.
+// UserHandle    @Summary      Liveness probe
+// @Description  Get single user by id.
+// @Produce      json
+// @Param        uid  path      string  true  "User uid."
+// @Success      200  {object}  User
+// @Failure      500  {object}  errors.ResponseError
+// @Router       /users/{uid} [get]
 func UserHandle(w http.ResponseWriter, r *http.Request) {
 	// Get authorized user and check their permissions.
 	authUser := middleware.UserFromRequest(r)
@@ -66,6 +80,12 @@ func UserHandle(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(res)
 }
 
+// GetUsersHandle  @Summary      Get the list of users.
+// @Description    Get the list of users.
+// @Produce       json
+// @Success        200  {object}  []User
+// @Failure       500       {object}  errors.ResponseError
+// @Router         /users/ [get]
 func GetUsersHandle(w http.ResponseWriter, r *http.Request) {
 	var users []*user.User
 
