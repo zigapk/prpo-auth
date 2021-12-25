@@ -86,7 +86,7 @@ func UserHandle(w http.ResponseWriter, r *http.Request) {
 // @Success        200  {object}  []User
 // @Failure       500       {object}  errors.ResponseError
 // @Router         /users/ [get]
-func GetUsersHandle(w http.ResponseWriter, r *http.Request) {
+func GetUsersHandle(w http.ResponseWriter, _ *http.Request) {
 	var users []*user.User
 
 	users, err := user.All()
