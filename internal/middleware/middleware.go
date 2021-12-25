@@ -3,6 +3,7 @@ package router
 import (
 	"context"
 	"encoding/json"
+	"github.com/rcrowley/go-metrics"
 	"net/http"
 	"strings"
 	"time"
@@ -34,6 +35,16 @@ func createLoggerMiddleware() func(handler http.Handler) http.Handler {
 			Bool("authenticated", u != nil).
 			Str("user_id", userID).
 			Send()
+	})
+}
+
+// metricsMiddleware counts number of requests.
+func metricsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		meter := metrics.GetOrRegisterMeter("requests", metrics.DefaultRegistry)
+		meter.Mark(1)
+
+		next.ServeHTTP(w, r)
 	})
 }
 
@@ -104,7 +115,7 @@ func Middleware(next http.Handler) http.Handler {
 }
 
 func AddMiddleware(handler http.Handler, authorizedOnly, customContentType bool) http.Handler {
-	c := alice.New(hlog.NewHandler(logger.Log), Middleware, createLoggerMiddleware())
+	c := alice.New(hlog.NewHandler(logger.Log), Middleware, createLoggerMiddleware(), metricsMiddleware)
 
 	if !customContentType {
 		c = c.Append(responseTypeHeaderMiddleware)

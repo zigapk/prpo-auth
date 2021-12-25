@@ -15,6 +15,7 @@ require (
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/justinas/alice v1.2.0
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6 // indirect
+	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/rs/zerolog v1.25.0
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/urfave/cli/v2 v2.3.0

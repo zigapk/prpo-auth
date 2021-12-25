@@ -11,7 +11,7 @@ docker run -p 5432:5432 \
     -e POSTGRES_USER=prpo \
     -e POSTGRES_PASSWORD=rootroot \
     -v prpo:/var/lib/postgresql/data \
-    -d postgres:13
+    -d postgres:14
 ```
 
 Install dependencies and compile:
