@@ -18,6 +18,7 @@ Install dependencies and compile:
 
 ```shell
 go mod download
+make bindata
 make docs
 make build
 ```
