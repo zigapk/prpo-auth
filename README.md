@@ -8,9 +8,9 @@ Run a development database via Docker:
 
 ```shell
 docker run -p 5432:5432 \
-    -e POSTGRES_USER=prpo \
+    -e POSTGRES_USER=prpo-auth \
     -e POSTGRES_PASSWORD=rootroot \
-    -v prpo:/var/lib/postgresql/data \
+    -v prpo-auth:/var/lib/postgresql/data \
     -d postgres:14
 ```
 
@@ -18,7 +18,7 @@ Install dependencies and compile:
 
 ```shell
 go mod download
-make bindata
+make docs
 make build
 ```
 
@@ -46,7 +46,7 @@ System behaviour can be configured through [configs/config.ini](configs/config.i
 
 Generate docs using
 ```bash
-swag init -d cmd/auth/,internal/handle
+make docs
 ```
 
 The docs are then available at `/docs`.
