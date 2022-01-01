@@ -25,7 +25,7 @@ func Load() {
 	iniProvider.KeyMode = ini.ModeUppercase
 
 	cfg = gonfig.New(iniProvider, environment.Provider{})
-	cfg.AppName = "prpo-auth"
+	cfg.AppName = "prpoauth"
 
 	err = Login.LoadKeys()
 	if err != nil {

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prpo-auth-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prpo-auth
+  template:
+    metadata:
+      labels:
+        app: prpo-auth
+    spec:
+      containers:
+        - name: prpo-auth
+          image: zigapk/prpo-auth:latest
+          env:
+            - name: PRPOAUTH_DATABASE_HOST
+              value: prpo-do-user-1433005-0.b.db.ondigitalocean.com
+            - name: PRPOAUTH_DATABASE_PORT
+              value: "25060"
+            - name: PRPOAUTH_DATABASE_DB_NAME
+              value: prpo-auth
+            - name: PRPOAUTH_DATABASE_SSL_MODE
+              value: require
+            - name: PRPOAUTH_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-pass-auth
+                  key: username
+            - name: PRPOAUTH_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-pass-auth
+                  key: password
+            - name: PRPOAUTH_LOGIN_SIGNING_PRIVATE_KEY_LOCATION
+              value: "/app/keys/privkey.pem"
+            - name: PRPOAUTH_LOGIN_SIGNING_PUBLIC_KEY_LOCATION
+              value: "/app/keys/pubkey.pem"
+          volumeMounts:
+            - name: keys
+              mountPath: "/app/keys"
+              readOnly: true
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: server
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: server
+            initialDelaySeconds: 10
+            periodSeconds: 3
+      volumes:
+        - name: keys
+          secret:
+            secretName: prpo-keys
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prpo-auth
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: prpo-auth

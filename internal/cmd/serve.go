@@ -27,6 +27,7 @@ func serve(_ *cli.Context) error {
 
 	// Start listening for connections.
 	listenAddress := fmt.Sprintf("%s:%d", config.Server.ListenAddress(), config.Server.Port())
+	logger.Log.Info().Msg(fmt.Sprintf("Starting server on %s.", listenAddress))
 	logger.Log.Fatal().Err(http.ListenAndServe(listenAddress, r)).Send()
 
 	return nil
