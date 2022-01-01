@@ -11,6 +11,8 @@ RUN go mod download -x
 # Build
 COPY cmd cmd
 COPY internal internal
+RUN CGO_ENABLED=0 GOOS=linux go install github.com/swaggo/swag/cmd/swag@latest
+RUN CGO_ENABLED=0 GOOS=linux swag init -d cmd/auth/,internal/handle
 RUN CGO_ENABLED=0 GOOS=linux go build github.com/zigapk/prpo-auth/cmd/auth
 
 #####################
