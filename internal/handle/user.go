@@ -48,7 +48,7 @@ func NewUserHandle(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(res)
 }
 
-// UserHandle    @Summary      Liveness probe
+// UserHandle    @Summary      Get user data.
 // @Description  Get single user by id.
 // @Produce      json
 // @Param        uid  path      string  true  "User uid."
