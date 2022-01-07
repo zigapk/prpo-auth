@@ -33,9 +33,10 @@ type authorizeAccessToken struct {
 }
 
 type authorizeRefreshToken struct {
-	RefreshToken   string `json:"refresh_token"`
-	AccessToken    string `json:"access_token"`
-	AccessTokenTtl int    `json:"access_token_ttl"`
+	RefreshToken    string `json:"refresh_token"`
+	AccessToken     string `json:"access_token"`
+	AccessTokenTtl  int    `json:"access_token_ttl"`
+	RefreshTokenTtl int    `json:"refresh_token_ttl"`
 }
 
 type User struct {
@@ -85,7 +86,14 @@ func authorizeWithPassword(w http.ResponseWriter, authRequest *authorizationRequ
 	}
 
 	// Create new refresh token.
-	dev, err := u.NewAuthorizedDevice()
+	tokenRefresh, err := u.CreateRefreshToken()
+	if err != nil {
+		logger.Log.Warn().Err(err).Send()
+
+		errors.Response(w, errors.LoginError)
+		return
+	}
+	dev, err := u.NewAuthorizedDevice(tokenRefresh)
 	if err != nil {
 		logger.Log.Warn().Err(err).Send()
 
@@ -104,9 +112,10 @@ func authorizeWithPassword(w http.ResponseWriter, authRequest *authorizationRequ
 
 	// Write response.
 	res, _ := json.Marshal(authorizeRefreshToken{
-		RefreshToken:   dev.Token,
-		AccessToken:    token,
-		AccessTokenTtl: config.Login.TokenTtl(),
+		RefreshToken:    dev.Token,
+		RefreshTokenTtl: config.Login.RefreshTokenTtl(),
+		AccessToken:     token,
+		AccessTokenTtl:  config.Login.TokenTtl(),
 	})
 	_, _ = w.Write(res)
 }

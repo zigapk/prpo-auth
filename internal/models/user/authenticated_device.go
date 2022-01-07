@@ -1,8 +1,6 @@
 package user
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"time"
 
 	"github.com/zigapk/prpo-auth/internal/database"
@@ -18,20 +16,11 @@ type AuthenticatedDevice struct {
 }
 
 // NewAuthorizedDevice creates new authorized device for user and saves id to DB.
-func (u *User) NewAuthorizedDevice() (*AuthenticatedDevice, error) {
-	// Create token.
-	tokenBytes := make([]byte, 128)
-	_, err := rand.Read(tokenBytes)
-	if err != nil {
-		return nil, err
-	}
-
-	token := base64.URLEncoding.EncodeToString(tokenBytes)
-
+func (u *User) NewAuthorizedDevice(token string) (*AuthenticatedDevice, error) {
 	// Insert into database.
 	dev := &AuthenticatedDevice{}
 	insert := `INSERT INTO authenticated_devices (user_id, token, last_used) VALUES ($1, $2, $3) RETURNING *`
-	err = database.DB.Get(dev, insert, u.UID, token, time.Now())
+	err := database.DB.Get(dev, insert, u.UID, token, time.Now())
 	if err != nil {
 		return nil, err
 	}

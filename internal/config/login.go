@@ -21,6 +21,11 @@ func (l login) TokenTtl() int {
 	return val
 }
 
+func (l login) RefreshTokenTtl() int {
+	val, _ := cfg.GetInt("login", "refresh_token_ttl")
+	return val
+}
+
 func (l login) SigningPrivateKeyLocation() string {
 	val, _ := cfg.GetString("login", "signing_private_key_location")
 	return val

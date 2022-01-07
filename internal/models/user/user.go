@@ -203,3 +203,21 @@ func (u *User) CreateAccessToken() (string, error) {
 
 	return ss, err
 }
+
+func (u *User) CreateRefreshToken() (string, error) {
+	now := time.Now()
+	expiresAt := now.Add(time.Duration(config.Login.RefreshTokenTtl()) * time.Second)
+
+	claims := util.Claims{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expiresAt.Unix(),
+			IssuedAt:  now.Unix(),
+			Subject:   u.UID,
+		},
+	}
+
+	refreshToken := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	ss, err := refreshToken.SignedString(config.Login.SigningPrivateKey)
+
+	return ss, err
+}
